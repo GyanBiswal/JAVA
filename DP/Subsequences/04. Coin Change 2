@@ -1,0 +1,71 @@
+class Solution {
+    public int change(int amount, int[] coins) {
+        int[][] dp = new int[coins.length][amount + 1];
+        for(int[] arr : dp) Arrays.fill(arr, -1);
+        return helperDp(coins, amount, 0, dp);
+    }
+    public int helperDp(int[] coins, int amount, int idx, int[][] dp){
+        if (amount == 0) return 1; // Found a valid combination
+        if (idx == coins.length) return 0; // No coins left, invalid path
+
+        if(dp[idx][amount] != -1) return dp[idx][amount];
+
+        int notTake = helperDp(coins, amount, idx + 1, dp);
+        int take = 0;
+        if (coins[idx] <= amount) {
+            take = helperDp(coins, amount - coins[idx], idx, dp);
+        }
+
+        return dp[idx][amount] = take + notTake;
+    }
+}
+
+
+
+
+// class Solution {
+//     public int change(int amount, int[] coins) {
+//         int n = coins.length;
+//         int[][] dp = new int[n + 1][amount + 1];
+
+//         // Base case: 1 way to make amount 0
+//         for (int i = 0; i <= n; i++) {
+//             dp[i][0] = 1;
+//         }
+
+//         // Fill the table
+//         for (int i = 1; i <= n; i++) {
+//             for (int j = 0; j <= amount; j++) {
+//                 int notTake = dp[i - 1][j];
+//                 int take = 0;
+//                 if (coins[i - 1] <= j) {
+//                     take = dp[i][j - coins[i - 1]];
+//                 }
+//                 dp[i][j] = take + notTake;
+//             }
+//         }
+
+//         return dp[n][amount];
+//     }
+// }
+
+
+
+// class Solution {
+//     public int change(int amount, int[] coins) {
+//         return helperRec(coins, amount, 0);
+//     }
+//     public int helperRec(int[] coins, int amount, int idx){
+//         if (amount == 0) return 1; // Found a valid combination
+//         if (idx == coins.length) return 0; // No coins left, invalid path
+
+//         int notTake = helperRec(coins, amount, idx + 1);
+
+//         int take = 0;
+//         if (coins[idx] <= amount) {
+//             take = helperRec(coins, amount - coins[idx], idx);
+//         }
+
+//         return take + notTake;
+//     }
+// }
