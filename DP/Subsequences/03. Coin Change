@@ -1,0 +1,68 @@
+class Solution {
+    public int coinChange(int[] coins, int amount) {
+        int[][] dp = new int[coins.length][amount + 1];
+        for(int[] arr : dp) Arrays.fill(arr, -1);
+        int res = helperDp(coins, amount, 0, dp);
+        return res == Integer.MAX_VALUE ? -1 : res;
+    }
+    public int helperDp(int[] coins, int amount, int idx, int[][] dp){
+        if(amount == 0) return 0;
+        if(idx == coins.length) return Integer.MAX_VALUE;
+
+        if(dp[idx][amount] != -1) return dp[idx][amount];
+
+        int notTake = helperDp(coins, amount, idx + 1, dp);
+        int take = Integer.MAX_VALUE;
+        if(coins[idx] <= amount){
+            int ans = helperDp(coins, amount - coins[idx], idx, dp);
+            if(ans != Integer.MAX_VALUE){
+                take = 1 + ans;
+            }
+        }
+
+        return dp[idx][amount] = Math.min(take, notTake);
+    }
+}
+
+
+
+
+// class Solution {
+//     public int coinChange(int[] coins, int amount) {
+//         int[] dp = new int[amount + 1];
+//         Arrays.fill(dp, amount + 1); // max possible value
+//         dp[0] = 0;
+
+//         for (int coin : coins) {
+//             for (int t = coin; t <= amount; t++) {
+//                 dp[t] = Math.min(dp[t], 1 + dp[t - coin]);
+//             }
+//         }
+
+//         return dp[amount] > amount ? -1 : dp[amount];
+//     }
+// }
+
+
+
+// class Solution {
+//     public int coinChange(int[] coins, int amount) {
+//         int res = helperRec(coins, amount, 0);
+//         return res == Integer.MAX_VALUE ? -1 : res;
+//     }
+//     public int helperRec(int[] coins, int amount, int idx){
+//         if(amount == 0) return 0;
+//         if(idx == coins.length) return Integer.MAX_VALUE;
+
+//         int notTake = helperRec(coins, amount, idx + 1);
+//         int take = Integer.MAX_VALUE;
+//         if(coins[idx] <= amount){
+//             int ans = helperRec(coins, amount - coins[idx], idx);
+//             if(ans != Integer.MAX_VALUE){
+//                 take = 1 + ans;
+//             }
+//         }
+
+//         return Math.min(take, notTake);
+//     }
+// }
