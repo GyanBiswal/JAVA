@@ -1,0 +1,98 @@
+import java.util.* ;
+import java.io.*; 
+public class Solution {
+    public static boolean subsetSumToK(int n, int k, int[] arr) {
+        Boolean[][] dp = new Boolean[n][k + 1];
+        // Because we need to represent all possible target sums 
+        // from 0 to k (inclusive), which requires k + 1 elements.
+        return helper(0, k, arr, dp);
+    }
+
+    private static boolean helper(int idx, int k, int[] arr, Boolean[][] dp) {
+        if(k == 0) return true;
+        if(idx == arr.length) return false;
+
+        if(dp[idx][k] != null) return dp[idx][k];
+
+        boolean notTake = helper(idx + 1, k, arr, dp);
+        boolean take = false;
+        if(arr[idx] <= k) {
+            take = helper(idx + 1, k - arr[idx], arr, dp);
+        }
+
+        return dp[idx][k] = take || notTake;
+    }
+}
+
+
+/*
+
+With boolean[][] dp, every entry is initialized to false by default ? 
+so you can't distinguish between an unsolved and a false result.
+
+Boolean is an object wrapper class (can be true, false, or null)
+
+*/
+
+
+
+
+
+
+
+// import java.util.* ;
+// import java.io.*; 
+// public class Solution {
+//     public static boolean subsetSumToK(int n, int k, int[] arr) {
+//         boolean[][] dp = new boolean[n][k + 1];
+
+//         // Base case: sum = 0 is always achievable
+//         for (int i = 0; i < n; i++) {
+//             dp[i][0] = true;
+//         }
+
+//         // First element case
+//         if (arr[0] <= k) {
+//             dp[0][arr[0]] = true;
+//         }
+
+//         // Fill the DP table
+//         for (int i = 1; i < n; i++) {
+//             for (int t = 1; t <= k; t++) {
+//                 boolean notTake = dp[i - 1][t];
+//                 boolean take = false;
+//                 if (arr[i] <= t) {
+//                     take = dp[i - 1][t - arr[i]];
+//                 }
+//                 dp[i][t] = take || notTake;
+//             }
+//         }
+
+//         return dp[n - 1][k];
+//     }
+// }
+
+
+
+
+
+
+
+// import java.util.* ;
+// import java.io.*; 
+// public class Solution {
+//     public static boolean subsetSumToK(int n, int k, int arr[]){
+//         return helperRec(n, k, arr, 0);
+//     }
+//     public static boolean helperRec(int n, int k, int arr[], int idx){
+//         if(k == 0) return true;
+//         if(idx >= n) return false;
+//         boolean notTake = helperRec(n, k, arr, idx + 1);
+//         boolean take = false;
+//         if(arr[idx] <= k){
+//             take = helperRec(n, k - arr[idx], arr, idx + 1);
+//         }
+
+//         return take || notTake;
+//     }
+// }
