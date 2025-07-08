@@ -1,0 +1,43 @@
+import java.util.*;
+public class Solution {
+    public static int unboundedKnapsack(int n, int w, int[] profit, int[] weight) {
+        int[][] dp = new int[n+1][w+1];
+        for(int[] arr : dp) Arrays.fill(arr, -1);
+        return helperDp(n, w, 0, profit, weight, dp);
+    }
+
+    public static int helperDp(int n, int w, int idx, int[] profit, int[] weight, int[][] dp){
+        if(w == 0) return 0;
+        if(idx == n) return 0;
+
+        if(dp[idx][w] != -1) return dp[idx][w];
+
+        int notTake = helperDp(n, w, idx + 1, profit, weight, dp);
+        int take = 0;
+        if(weight[idx] <= w){
+            take = profit[idx] + helperDp(n, w - weight[idx], idx, profit, weight, dp);
+        }
+
+        return dp[idx][w] = Math.max(take, notTake);
+    }
+}
+
+
+// public class Solution {
+//     public static int unboundedKnapsack(int n, int w, int[] profit, int[] weight) {
+//         return helperRec(n, w, 0, profit, weight);
+//     }
+
+//     public static int helperRec(int n, int w, int idx, int[] profit, int[] weight){
+//         if(w == 0) return 0;
+//         if(idx == n) return 0;
+
+//         int notTake = helperRec(n, w, idx + 1, profit, weight);
+//         int take = 0;
+//         if(weight[idx] <= w){
+//             take = profit[idx] + helperRec(n, w - weight[idx], idx, profit, weight);
+//         }
+
+//         return Math.max(take, notTake);
+//     }
+// }
