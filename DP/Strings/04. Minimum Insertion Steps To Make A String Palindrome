@@ -1,0 +1,52 @@
+class Solution {
+    public int minInsertions(String s) {
+        int n = s.length();
+        String s2 = new StringBuilder(s).reverse().toString();
+        int[][] dp = new int[n + 1][n + 1];
+
+        for(int i = n - 1; i >= 0; i--){
+            for(int j = n - 1; j >= 0; j--){
+                if(s.charAt(i) == s2.charAt(j)){
+                    dp[i][j] = 1 + dp[i + 1][j + 1];
+                }
+                else dp[i][j] = Math.max(dp[i + 1][j], dp[i][j + 1]);
+            }
+        }
+        return n - dp[0][0];
+    }
+}
+
+
+// class Solution {
+//     public int minInsertions(String s) {
+//         int n = s.length();
+//         String s2 = new StringBuilder(s).reverse().toString();
+//         int[][] dp = new int[n][n];
+//         for(int[] arr : dp) Arrays.fill(arr, -1);
+//         return n - lcsDp(s, s2, 0, 0, dp);
+//     }
+//     public int lcsDp(String s1, String s2, int idx1, int idx2, int[][] dp){
+//         if(idx1 == s1.length() || idx2 == s2.length()) return 0;
+//         if(dp[idx1][idx2] != -1) return dp[idx1][idx2];
+//         if(s1.charAt(idx1) == s2.charAt(idx2)){
+//             return 1 + lcsDp(s1, s2, idx1 + 1, idx2 + 1, dp);
+//         }
+//         else return dp[idx1][idx2] = Math.max(lcsDp(s1, s2, idx1 + 1, idx2, dp), lcsDp(s1, s2, idx1, idx2 + 1, dp));
+//     }
+// }
+
+
+// class Solution {
+//     public int minInsertions(String s) {
+//         int n = s.length();
+//         String s2 = new StringBuilder(s).reverse().toString();
+//         return n - lcsRec(s, s2, 0, 0);
+//     }
+//     public int lcsRec(String s1, String s2, int idx1, int idx2){
+//         if(idx1 == s1.length() || idx2 == s2.length()) return 0;
+//         if(s1.charAt(idx1) == s2.charAt(idx2)){
+//             return 1 + lcsRec(s1, s2, idx1 + 1, idx2 + 1);
+//         }
+//         else return Math.max(lcsRec(s1, s2, idx1 + 1, idx2), lcsRec(s1, s2, idx1, idx2 + 1));
+//     }
+// }
