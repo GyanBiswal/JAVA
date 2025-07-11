@@ -1,0 +1,57 @@
+class Solution {
+    private static int[][] dirs = {{-1,0},{0,-1},{1,0},{0,1}};
+    public int longestIncreasingPath(int[][] matrix) {
+        if(matrix.length == 0 || matrix[0].length == 0) return 0;
+        int maxPath = 0;
+        int[][] dp = new int[matrix.length][matrix[0].length];
+        for(int[] arr : dp) Arrays.fill(arr, -1);
+        for(int i = 0; i < matrix.length; i++){
+            for(int j = 0; j < matrix[0].length; j++){
+                maxPath = Math.max(maxPath, dfsDp(matrix, i, j, dp));
+            }
+        }
+        return maxPath;
+    }
+    public int dfsDp(int[][] matrix, int i, int j, int[][] dp){
+        int maxLen = 1;
+        if(dp[i][j] != -1) return dp[i][j];
+        for(int[] dir : dirs){
+            int newX = i + dir[0];
+            int newY = j + dir[1];
+
+            if(newX >= 0 && newX < matrix.length && newY >= 0 && newY < matrix[0].length && matrix[newX][newY] > matrix[i][j]){
+                maxLen = Math.max(maxLen, 1 + dfsDp(matrix, newX, newY, dp));
+            }
+        }
+        return dp[i][j] = maxLen;
+    }
+}
+
+
+
+
+// class Solution {
+//     private static int[][] dirs = {{-1,0},{0,-1},{1,0},{0,1}};
+//     public int longestIncreasingPath(int[][] matrix) {
+//         if(matrix.length == 0 || matrix[0].length == 0) return 0;
+//         int maxPath = 0;
+//         for(int i = 0; i < matrix.length; i++){
+//             for(int j = 0; j < matrix[0].length; j++){
+//                 maxPath = Math.max(maxPath, dfs(matrix, i, j));
+//             }
+//         }
+//         return maxPath;
+//     }
+//     public int dfs(int[][] matrix, int i, int j){
+//         int maxLen = 1;
+//         for(int[] dir : dirs){
+//             int newX = i + dir[0];
+//             int newY = j + dir[1];
+
+//             if(newX >= 0 && newX < matrix.length && newY >= 0 && newY < matrix[0].length && matrix[newX][newY] > matrix[i][j]){
+//                 maxLen = Math.max(maxLen, 1 + dfs(matrix, newX, newY));
+//             }
+//         }
+//         return maxLen;
+//     }
+// }
