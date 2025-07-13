@@ -1,0 +1,40 @@
+
+class Solution {
+    public static boolean isValid(int[] arr, int maxAllocatedPages, int k){
+        int totalStudents = 1;
+        int currPages = 0;
+        for(int i = 0; i < arr.length; i++){
+            if(arr[i] > maxAllocatedPages) return false;
+            if(currPages + arr[i] <= maxAllocatedPages){
+                currPages += arr[i];
+            }
+            else{
+                totalStudents++;
+                currPages = arr[i];   
+            }
+        }
+        return totalStudents > k ? false : true;
+    }
+    public static int findPages(int[] arr, int k) {
+        if(k > arr.length) return -1;
+        int start = 0;
+        int end = 0;
+        int ans = -1;
+        for(int i : arr){
+            end += i;
+        }
+        
+        while(start <= end){
+            int mid = start + (end - start) / 2; // max allowed pages
+            
+            if(isValid(arr, mid, k)){
+                ans = mid; // possible answer
+                end = mid - 1;
+            }
+            else{
+                start = mid + 1;
+            }
+        }
+        return ans;
+    }
+}
