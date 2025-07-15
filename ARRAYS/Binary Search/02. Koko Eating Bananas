@@ -1,0 +1,32 @@
+class Solution {
+    public boolean canEatAll(int[] piles, int h, int mid){
+        int totalHours = 0;
+
+        for(int pile : piles){
+            totalHours += pile/mid;
+            if(pile % mid != 0){
+                totalHours++;
+            }
+        }
+        return totalHours <= h;
+    }
+    public int minEatingSpeed(int[] piles, int h) {
+        int left = 1;
+        int right = 0;
+        for(int i = 0; i < piles.length; i++){
+            right = Math.max(right, piles[i]);
+        }
+
+        while(left < right){
+            int mid = left + (right - left) / 2; // i can eat mid bananas in one hour
+
+            if(canEatAll(piles, h, mid)){
+                right = mid;
+            }
+            else{
+                left = mid + 1;
+            }
+        }
+        return left;
+    }
+}
