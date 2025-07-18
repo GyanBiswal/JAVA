@@ -1,0 +1,23 @@
+import java.util.* ;
+import java.io.*; 
+
+public class Solution {
+
+	public static int countSubarrays(int n, int[] arr) {
+		int count = 0;
+		int prefixSum = 0;
+		HashMap<Integer, Integer> prefixSumCount = new HashMap<>();
+		for(int num : arr){
+			prefixSum += num;
+
+			if(prefixSum == 0) count++;
+
+			if(prefixSumCount.containsKey(prefixSum)){
+				count += prefixSumCount.get(prefixSum);
+			}
+			prefixSumCount.put(prefixSum, prefixSumCount.getOrDefault(prefixSum, 0) + 1);
+		}
+		return count;
+	}
+
+}
