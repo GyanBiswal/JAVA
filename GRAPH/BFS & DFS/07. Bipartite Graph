@@ -1,0 +1,24 @@
+class Solution {
+    public boolean isBipartite(int[][] graph) {
+        int n = graph.length;
+        int[] color = new int[n];
+        Arrays.fill(color,-1);
+
+        for(int i = 0; i < n; i++){
+            if(color[i] == -1){
+                if(!dfs(graph, 0, color, i)) return false;
+            }
+        }
+        return true;
+    }
+    public boolean dfs(int[][] graph, int currColor, int[] color, int curr){
+        color[curr] = currColor;
+        for(int neigh : graph[curr]){
+            if(color[neigh] == -1){
+                if(!dfs(graph, 1 - currColor, color, neigh)) return false;
+            }
+            else if(color[neigh] == currColor) return false;
+        }
+        return true;
+    }
+}
