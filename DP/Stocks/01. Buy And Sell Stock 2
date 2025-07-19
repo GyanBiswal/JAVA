@@ -1,0 +1,67 @@
+class Solution {
+    public int maxProfit(int[] prices) {
+        int n = prices.length;
+        int[][] dp = new int[n + 1][2];
+        
+        for(int idx = n - 1; idx >= 0; idx--){
+            for(int buyAllowed = 0; buyAllowed <= 1; buyAllowed++){
+                if(buyAllowed == 1){
+                    int buy = -prices[idx] + dp[idx + 1][0];
+                    int skip = 0 + dp[idx + 1][1];
+                    dp[idx][buyAllowed] = Math.max(buy, skip);
+                }
+                else{ // buyAllowed = false , so I can either sell or skip
+                    int sell = prices[idx] + dp[idx + 1][1];
+                    int skip = 0 + dp[idx + 1][0];
+                    dp[idx][buyAllowed] = Math.max(sell, skip);
+                }
+            }
+        }
+        return dp[0][1];
+    }
+}
+
+
+// class Solution {
+//     public int maxProfit(int[] prices) {
+//         int[][] dp = new int[prices.length][2];
+//         for(int[] arr : dp) Arrays.fill(arr, -1);
+//         return helperDp(prices, 0, 1, dp);
+//     }
+//     public int helperDp(int[] prices, int idx, int buyAllowed, int[][] dp){
+//         if(idx == prices.length) return 0;
+//         if(dp[idx][buyAllowed] != -1) return dp[idx][buyAllowed];
+
+//         if(buyAllowed == 1){
+//             int buy = -prices[idx] + helperDp(prices, idx + 1, 0, dp);
+//             int skip = 0 + helperDp(prices, idx + 1, 1, dp);
+//             return dp[idx][buyAllowed] = Math.max(buy, skip);
+//         }
+//         else{ // buyAllowed = false , so I can either sell or skip
+//             int sell = prices[idx] + helperDp(prices, idx + 1, 1, dp); 
+//             int skip = 0 + helperDp(prices, idx + 1, 0, dp);
+//             return dp[idx][buyAllowed] = Math.max(sell, skip);
+//         }
+//     }
+// }
+
+
+// class Solution {
+//     public int maxProfit(int[] prices) {
+//         return helperRec(prices, 0, 1);
+//     }
+//     public int helperRec(int[] prices, int idx, int buyAllowed){
+//         if(idx == prices.length) return 0;
+
+//         if(buyAllowed == 1){
+//             int buy = -prices[idx] + helperRec(prices, idx + 1, 0);
+//             int skip = 0 + helperRec(prices, idx + 1, 1);
+//             return Math.max(buy, skip);
+//         }
+//         else{ // buyAllowed = false , so I can either sell or skip
+//             int sell = prices[idx] + helperRec(prices, idx + 1, 1); 
+//             int skip = 0 + helperRec(prices, idx + 1, 0);
+//             return Math.max(sell, skip);
+//         }
+//     }
+// }
