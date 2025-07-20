@@ -1,0 +1,69 @@
+/*
+class Node
+{
+    int data;
+    Node left, right;
+
+    public Node(int d)
+    {
+        data = d;
+        left = right = null;
+    }
+}
+*/
+
+/*
+
+step-1 : Left boundary (excluding leaves)
+
+step-2 : All leaves (left to right)
+
+step-3 : Right boundary (excluding leaves, in reverse order)
+
+*/
+
+class Solution {
+    boolean isLeaf(Node root){
+        return root.left == null && root.right == null;
+    }
+    void leftBoundary(Node root, ArrayList<Integer> ans){
+        if(root == null) return;
+        if(!isLeaf(root)) ans.add(root.data);
+        if(root.left != null) leftBoundary(root.left, ans);
+        else if(root.right != null) leftBoundary(root.right, ans);
+        // If leaf, do nothing here, leaves will be added separately
+    }
+    
+    void leafNodes(Node root, ArrayList<Integer> ans){
+        if(root == null) return;
+        leafNodes(root.left, ans);
+        if(isLeaf(root)) ans.add(root.data);
+        leafNodes(root.right, ans);
+    }
+    
+    void rightBoundary(Node root, Stack<Integer> st){
+        if(root == null) return;
+        if(!isLeaf(root)) st.push(root.data);
+        if(root.right != null) rightBoundary(root.right, st);
+        else if(root.left != null) rightBoundary(root.left, st);
+        // If leaf, do nothing here, leaves will be added separately
+    }
+    
+    ArrayList<Integer> boundaryTraversal(Node node) {
+        ArrayList<Integer> ans = new ArrayList<>();
+        if(node == null) return ans;
+        if(!isLeaf(node)) ans.add(node.data);
+        
+        Stack<Integer> st = new Stack<>();
+        
+        leftBoundary(node.left, ans);
+        leafNodes(node, ans);
+        rightBoundary(node.right, st);
+        
+        while(!st.isEmpty()){
+            ans.add(st.pop());
+        }
+        
+        return ans;
+    }
+}
