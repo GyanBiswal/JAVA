@@ -1,0 +1,17 @@
+class Solution {
+    public static int minCost(int[] arr) {
+        PriorityQueue<Integer> minHeap = new PriorityQueue<>();
+        int minSum = 0;
+        for(int i : arr){
+            minHeap.add(i);
+        }
+        while(!minHeap.isEmpty() && minHeap.size() >= 2){
+            int a = minHeap.poll();
+            int b = minHeap.poll();
+            
+            minSum += a + b;
+            minHeap.add(a+b);
+        }
+        return minSum;
+    }
+}
