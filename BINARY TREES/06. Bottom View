@@ -1,0 +1,48 @@
+/*
+class Node
+{
+    int data; //data of the node
+    int hd; //horizontal distance of the node
+    Node left, right; //left and right references
+
+    // Constructor of tree node
+    public Node(int key)
+    {
+        data = key;
+        hd = Integer.MAX_VALUE;
+        left = right = null;
+    }
+}
+*/
+
+class Solution {
+    static class Pair{
+        Node Node;
+        int hd;
+        Pair(Node Node, int hd){
+            this.Node = Node;
+            this.hd = hd;
+        }
+    }
+    static ArrayList<Integer> bottomView(Node root) {
+        ArrayList<Integer> ans = new ArrayList<>();
+        if(root == null) return ans;
+        TreeMap<Integer, Integer> map = new TreeMap<>();
+        Queue<Pair> q = new LinkedList<>();
+        q.offer(new Pair(root, 0));
+        
+        while(!q.isEmpty()){
+            Pair curr = q.poll();
+            Node currNode = curr.Node;
+            int currHd = curr.hd;
+            
+            map.put(currHd, currNode.data);
+            
+            if(currNode.left != null) q.offer(new Pair(currNode.left, currHd - 1));
+            if(currNode.right != null) q.offer(new Pair(currNode.right, currHd + 1));
+        }
+        
+        for(int col : map.values()) ans.add(col);
+        return ans;
+    }
+}
