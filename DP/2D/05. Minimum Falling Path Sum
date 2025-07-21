@@ -1,0 +1,79 @@
+class Solution {
+    public int minFallingPathSum(int[][] matrix) {
+        int minSum = Integer.MAX_VALUE;
+        int m = matrix.length, n = matrix[0].length;
+        int[][] dp = new int[m][n];
+
+        // Base case: copy last row
+        for (int col = 0; col < n; col++) {
+            dp[m - 1][col] = matrix[m - 1][col];
+        }
+
+        for(int row = m - 2; row >= 0; row--){
+            for(int col = 0; col < n; col++){
+                int leftDiagonal = (col > 0) ? dp[row + 1][col - 1] : Integer.MAX_VALUE;
+                int down = dp[row + 1][col];
+                int rightDiagonal = (col < n - 1) ? dp[row + 1][col + 1] : Integer.MAX_VALUE;
+
+                dp[row][col] = matrix[row][col] + Math.min(down, Math.min(leftDiagonal, rightDiagonal));
+            }
+        }
+
+        for (int col = 0; col < n; col++) {
+            minSum = Math.min(minSum, dp[0][col]);
+        }
+
+        return minSum;
+        
+    }
+}
+
+
+// class Solution {
+//     public int minFallingPathSum(int[][] matrix) {
+//         int minSum = Integer.MAX_VALUE;
+//         int m = matrix.length, n = matrix[0].length;
+//         int[][] dp = new int[m][n];
+//         for(int[] arr : dp) Arrays.fill(arr, -1);
+//         for(int col = 0; col < matrix[0].length; col++){
+//             minSum = Math.min(minSum, helperDp(matrix, 0, col, dp));
+//         }
+//         return minSum;
+//     }
+//     public int helperDp(int[][] matrix, int row, int col, int[][] dp){
+//         int n = matrix.length;
+
+//         if(col < 0 || col >= n) return Integer.MAX_VALUE;
+//         if(row == n - 1) return matrix[row][col];
+//         if(dp[row][col] != - 1) return dp[row][col];
+
+//         int leftDiagonal = helperDp(matrix, row + 1, col - 1, dp);
+//         int down = helperDp(matrix, row + 1, col, dp);
+//         int rightDiagonal = helperDp(matrix, row + 1, col + 1, dp);
+
+//         return dp[row][col] = matrix[row][col] + Math.min(leftDiagonal, Math.min(down, rightDiagonal));
+//     }
+// }
+
+
+// class Solution {
+//     public int minFallingPathSum(int[][] matrix) {
+//         int minSum = Integer.MAX_VALUE;
+//         for(int col = 0; col < matrix[0].length; col++){
+//             minSum = Math.min(minSum, helperRec(matrix, 0, col));
+//         }
+//         return minSum;
+//     }
+//     public int helperRec(int[][] matrix, int row, int col){
+//         int n = matrix.length;
+
+//         if(col < 0 || col >= n) return Integer.MAX_VALUE;
+//         if(row == n - 1) return matrix[row][col];
+
+//         int leftDiagonal = helperRec(matrix, row + 1, col - 1);
+//         int down = helperRec(matrix, row + 1, col);
+//         int rightDiagonal = helperRec(matrix, row + 1, col + 1);
+
+//         return matrix[row][col] + Math.min(leftDiagonal, Math.min(down, rightDiagonal));
+//     }
+// }
