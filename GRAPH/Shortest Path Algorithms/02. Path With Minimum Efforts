@@ -1,0 +1,32 @@
+class Solution {
+    public int minimumEffortPath(int[][] heights) {
+        int m = heights.length, n = heights[0].length;
+        int[][] dirs = {{-1, 0}, {0, -1}, {1, 0}, {0, 1}};
+        int[][] efforts = new int[m][n];
+        for(int[] arr : efforts) Arrays.fill(arr, Integer.MAX_VALUE);
+
+        PriorityQueue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a[0]));
+        pq.offer(new int[]{0, 0, 0}); // effort, row, col
+
+        while(!pq.isEmpty()){
+            int[] curr = pq.poll();
+            int currEffort = curr[0], x = curr[1], y = curr[2];
+
+            if(x == m - 1 && y == n - 1) return currEffort;
+
+            for(int[] dir : dirs){
+                int newX = x + dir[0];
+                int newY = y + dir[1];
+
+                if(newX >= 0 && newX < m && newY >= 0 && newY < n){
+                    int nextEffort = Math.max(currEffort, Math.abs(heights[newX][newY] - heights[x][y]));
+                    if(nextEffort < efforts[newX][newY]){
+                        efforts[newX][newY] = nextEffort;
+                        pq.offer(new int[]{nextEffort,newX, newY});
+                    }
+                }
+            }
+        }
+        return -1;
+    }
+}
