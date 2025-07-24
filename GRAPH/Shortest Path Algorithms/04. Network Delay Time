@@ -1,0 +1,42 @@
+class Solution {
+    public int networkDelayTime(int[][] times, int n, int k) {
+        List<List<int[]>> adj = new ArrayList<>();
+        for(int i = 0; i <= n; i++){
+            adj.add(new ArrayList<>());
+        }
+
+        for(int[] time : times){
+            int u = time[0], v = time[1], w = time[2];
+            adj.get(u).add(new int[]{v, w});
+        }
+
+        int[] distance = new int[n + 1];
+        Arrays.fill(distance, Integer.MAX_VALUE);
+        distance[k] = 0;
+
+        PriorityQueue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a[0]));
+        pq.offer(new int[]{0, k});
+
+        while(!pq.isEmpty()){
+            int[] current = pq.poll();
+            int currDist = current[0], currNode = current[1];
+
+            if(currDist > distance[currNode]) continue;
+
+            for(int[] neighbors : adj.get(currNode)){
+                int adjNode = neighbors[0], adjWeight = neighbors[1];
+                if(adjWeight + currDist < distance[adjNode]){
+                    distance[adjNode] = adjWeight + currDist;
+                    pq.offer(new int[]{distance[adjNode], adjNode});
+                }
+            }
+        }
+
+        int maxTime = 0;
+        for(int i = 1; i <= n; i++){
+            if(distance[i] == Integer.MAX_VALUE) return -1; // unreachable
+            maxTime = Math.max(maxTime, distance[i]);
+        }
+        return maxTime;
+    }
+}
